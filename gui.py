@@ -8,24 +8,25 @@ from playfaircypher import (
     encrypt,
     decrypt,
     format_five,
+    create_matrix,
     ALPHABET_CZECH,
     ALPHABET_ENGLISH,
 )
 
 DARK_BG = "#2b2b2b"
-LIGHT_TXT = "#9e74d4"
+LIGHT_TXT = "#08AC2C"
 DARK_ENTRY = "#3c3c3c"
 BUTTON_BG = "#4a4a4a"
-FONT = ("Arial", 11)
-LABEL_FONT = ("Arial", 11, "bold")
-BUTTON_FONT = ("Arial", 12, "bold")
+FONT = ("Consolas", 11)
+LABEL_FONT = ("Consolas", 11, "bold")
+BUTTON_FONT = ("Consolas", 12, "bold")
 
 
 class PlayfairCipherGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("< Playfair Cipher >")
-        self.root.geometry("550x500")
+        self.root.title("Playfair Cipher")
+        self.root.geometry("525x525")
         self.root.resizable(False, False)
         self.root.configure(bg=DARK_BG)
         self.current_alphabet = ALPHABET_CZECH
@@ -56,7 +57,7 @@ class PlayfairCipherGUI:
             font=FONT,
             wrap=tk.WORD,
         )
-        self.input_text.pack(fill=tk.BOTH, expand=False, pady=(0, 10))
+        self.input_text.pack(fill=tk.BOTH, expand=False, padx=(3, 0), pady=(0, 10))
 
         tk.Label(
             left_frame,
@@ -75,7 +76,9 @@ class PlayfairCipherGUI:
             font=FONT,
             wrap=tk.WORD,
         )
-        self.filtered_encrypt_text.pack(fill=tk.BOTH, expand=False, pady=(0, 10))
+        self.filtered_encrypt_text.pack(
+            fill=tk.BOTH, expand=False, padx=(3, 0), pady=(0, 10)
+        )
 
         tk.Label(
             left_frame,
@@ -94,7 +97,9 @@ class PlayfairCipherGUI:
             font=FONT,
             wrap=tk.WORD,
         )
-        self.filtered_decrypt_text.pack(fill=tk.BOTH, expand=False, pady=(0, 10))
+        self.filtered_decrypt_text.pack(
+            fill=tk.BOTH, expand=False, padx=(3, 0), pady=(0, 10)
+        )
 
         tk.Label(
             left_frame,
@@ -113,7 +118,7 @@ class PlayfairCipherGUI:
             font=FONT,
             wrap=tk.WORD,
         )
-        self.output_text.pack(fill=tk.BOTH, expand=False, pady=(0, 10))
+        self.output_text.pack(fill=tk.BOTH, expand=False, padx=(3, 0), pady=(0, 10))
 
         self.setup_buttons(left_frame)
 
@@ -149,20 +154,50 @@ class PlayfairCipherGUI:
 
     def setup_right_panel(self, parent):
         right_frame = tk.Frame(parent, bg=DARK_BG, width=400)
-        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, padx=(10, 0))
+        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, padx=(10, 10))
         right_frame.pack_propagate(False)
 
         tk.Label(
             right_frame, text="Alphabet", bg=DARK_BG, fg=LIGHT_TXT, font=LABEL_FONT
-        ).pack(anchor=tk.W, pady=(0, 10))
+        ).pack(
+            anchor=tk.W,
+        )
 
         self.setup_alphabet_selection(right_frame)
+
+        # Abeceda s menším fontom a väčším width
+        self.alphabet_display = tk.Entry(
+            right_frame,
+            bg=DARK_ENTRY,
+            fg=LIGHT_TXT,
+            font=("Consolas", 11),
+            width=33,
+            state="readonly",
+            readonlybackground=DARK_ENTRY,
+            relief=tk.RIDGE,
+            borderwidth=2,
+        )
+        self.alphabet_display.pack(anchor=tk.W, padx=(3, 0), pady=(0, 5))
+
+        # Mapovanie
+        self.mapping_display = tk.Label(
+            right_frame,
+            text="",
+            bg=DARK_BG,
+            fg=LIGHT_TXT,
+            font=("Consolas", 11, "bold"),
+        )
+        self.mapping_display.pack(anchor=tk.W, pady=(0, 15))
+
         self.setup_keyword_entry(right_frame)
         self.setup_matrix(right_frame)
 
+        # Inicializuj zobrazenie
+        self.update_alphabet_info()
+
     def setup_alphabet_selection(self, parent):
         radio_frame = tk.Frame(parent, bg=DARK_BG)
-        radio_frame.pack(anchor=tk.W, pady=(0, 15))
+        radio_frame.pack(anchor=tk.W, pady=(0, 5))
 
         tk.Radiobutton(
             radio_frame,
@@ -172,11 +207,12 @@ class PlayfairCipherGUI:
             bg=DARK_BG,
             fg=LIGHT_TXT,
             selectcolor=BUTTON_BG,
-            font=("Arial", 10),
+            font=("Consolas", 10),
             command=self.change_alphabet,
             activebackground=DARK_BG,
             activeforeground=LIGHT_TXT,
-        ).pack(side=tk.LEFT, padx=(0, 30))
+            padx=-5,
+        ).pack(side=tk.LEFT, padx=(0, 25))
         tk.Radiobutton(
             radio_frame,
             text="ENGLISH",
@@ -185,32 +221,35 @@ class PlayfairCipherGUI:
             bg=DARK_BG,
             fg=LIGHT_TXT,
             selectcolor=BUTTON_BG,
-            font=("Arial", 10),
+            font=("Consolas", 10),
             command=self.change_alphabet,
             activebackground=DARK_BG,
             activeforeground=LIGHT_TXT,
-        ).pack(side=tk.LEFT)
+        ).pack(side=tk.LEFT, padx=(25, 0))
 
     def setup_keyword_entry(self, parent):
         tk.Label(
             parent, text="Keyword", bg=DARK_BG, fg=LIGHT_TXT, font=LABEL_FONT
-        ).pack(anchor=tk.W, pady=(0, 5))
+        ).pack(anchor=tk.W, pady=(10, 5))
         self.keyword_entry = tk.Entry(
             parent,
             bg=DARK_ENTRY,
             fg=LIGHT_TXT,
             insertbackground=LIGHT_TXT,
             font=FONT,
-            width=21,
+            width=27,
         )
-        self.keyword_entry.pack(anchor=tk.W, pady=(0, 15))
+        self.keyword_entry.pack(anchor=tk.W, padx=(3, 0), pady=(0, 15))
+
+        # Realtime matrix update
+        self.keyword_entry.bind("<KeyRelease>", self.update_matrix_realtime)
 
     def setup_matrix(self, parent):
         tk.Label(parent, text="Matrix", bg=DARK_BG, fg=LIGHT_TXT, font=LABEL_FONT).pack(
             anchor=tk.W, pady=(0, 5)
         )
         matrix_frame = tk.Frame(parent, bg=DARK_BG)
-        matrix_frame.pack(anchor=tk.W, pady=(0, 15))
+        matrix_frame.pack(anchor=tk.W, padx=(3, 0), pady=(0, 15))
 
         self.matrix_labels = []
         for i in range(5):
@@ -221,7 +260,7 @@ class PlayfairCipherGUI:
                     text="?",
                     bg=BUTTON_BG,
                     fg=LIGHT_TXT,
-                    font=("Arial", 14, "bold"),
+                    font=("Consolas", 14, "bold"),
                     width=3,
                     height=1,
                     relief=tk.RIDGE,
@@ -237,6 +276,43 @@ class PlayfairCipherGUI:
             self.current_alphabet = ALPHABET_CZECH
         elif choice == "ENGLISH":
             self.current_alphabet = ALPHABET_ENGLISH
+
+        self.update_alphabet_info()
+
+    def update_alphabet_info(self):
+        """Update alphabet display and character mapping info"""
+        choice = self.alphabet_var.get()
+
+        if choice == "CZECH":
+            alphabet_text = "ABCDEFGHIJKLMNOPQRSTUVXYZ"
+            mapping_text = "W → V"
+        elif choice == "ENGLISH":
+            alphabet_text = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+            mapping_text = "J → I"
+        else:
+            alphabet_text = ""
+            mapping_text = ""
+
+        # Update Entry widget
+        self.alphabet_display.config(state="normal")
+        self.alphabet_display.delete(0, tk.END)
+        self.alphabet_display.insert(0, alphabet_text)
+        self.alphabet_display.config(state="readonly")
+
+        # Update mapping Label
+        self.mapping_display.config(text=mapping_text)
+
+    def update_matrix_realtime(self, event=None):
+        """Update matrix in real-time as user types keyword"""
+        try:
+            key = self.keyword_entry.get().strip()
+            if not key:
+                return
+
+            matrix = create_matrix(key, self.current_alphabet)
+            self.update_matrix(matrix)
+        except Exception as e:
+            pass
 
     def update_matrix(self, matrix):
         for i in range(5):
@@ -279,10 +355,16 @@ class PlayfairCipherGUI:
                 messagebox.showwarning("Error", "Please enter a keyword!")
                 return
 
-            plaintext, matrix = decrypt(ciphertext, key, self.current_alphabet)
+            plaintext, matrix, decrypted_bigrams = decrypt(
+                ciphertext, key, self.current_alphabet
+            )
 
-            self.set_text(self.filtered_decrypt_text, plaintext)
+            # Zobraz bigramy v Filtered Decryption Text
+            self.set_text(self.filtered_decrypt_text, " ".join(decrypted_bigrams))
+
+            # Zobraz čistý text v output
             self.set_text(self.output_text, plaintext)
+
             self.update_matrix(matrix)
             self.set_text(self.filtered_encrypt_text, "")
         except Exception as e:
