@@ -28,10 +28,10 @@ from playfaircypher import (
     ALPHABET_ENGLISH,
 )
 
-DARK_BG = "#2b2b2b"
+DARK_BG = "#222026"
 LIGHT_TXT = "#08AC2C"
-DARK_ENTRY = "#3c3c3c"
-BUTTON_BG = "#4a4a4a"
+DARK_ENTRY = "#222026"
+BUTTON_BG = "#2b2b2b"
 HIGHLIGHT_BG = "#08AC2C"
 HIGHLIGHT_FG = "#2b2b2b"
 FONT = ("Consolas", 11)
@@ -73,6 +73,11 @@ class PlayfairCipherGUI:
             insertbackground=LIGHT_TXT,
             font=FONT,
             wrap=tk.WORD,
+            relief=tk.FLAT,
+            borderwidth=1,
+            highlightthickness=1,
+            highlightbackground=LIGHT_TXT,
+            highlightcolor=LIGHT_TXT,
         )
         self.input_text.pack(fill=tk.BOTH, expand=False, padx=(3, 0), pady=(0, 10))
 
@@ -92,6 +97,11 @@ class PlayfairCipherGUI:
             state=tk.DISABLED,
             font=FONT,
             wrap=tk.WORD,
+            relief=tk.FLAT,
+            borderwidth=1,
+            highlightthickness=1,
+            highlightbackground=LIGHT_TXT,
+            highlightcolor=LIGHT_TXT,
         )
         self.filtered_encrypt_text.pack(
             fill=tk.BOTH, expand=False, padx=(3, 0), pady=(0, 10)
@@ -113,6 +123,11 @@ class PlayfairCipherGUI:
             state=tk.DISABLED,
             font=FONT,
             wrap=tk.WORD,
+            relief=tk.FLAT,
+            borderwidth=1,
+            highlightthickness=1,
+            highlightbackground=LIGHT_TXT,
+            highlightcolor=LIGHT_TXT,
         )
         self.filtered_decrypt_text.pack(
             fill=tk.BOTH, expand=False, padx=(3, 0), pady=(0, 10)
@@ -134,6 +149,11 @@ class PlayfairCipherGUI:
             state=tk.DISABLED,
             font=FONT,
             wrap=tk.WORD,
+            relief=tk.FLAT,
+            borderwidth=1,
+            highlightthickness=1,
+            highlightbackground=LIGHT_TXT,
+            highlightcolor=LIGHT_TXT,
         )
         self.output_text.pack(fill=tk.BOTH, expand=False, padx=(3, 0), pady=(0, 10))
 
@@ -151,6 +171,9 @@ class PlayfairCipherGUI:
             borderwidth=1,
             focuscolor="none",
             relief="flat",
+            highlightthickness=1,
+            highlightbackground=LIGHT_TXT,
+            highlightcolor=LIGHT_TXT,
         )
         style.map(
             "Custom.TButton",
@@ -202,7 +225,11 @@ class PlayfairCipherGUI:
             width=33,
             state="readonly",
             readonlybackground=DARK_ENTRY,
-            borderwidth=2,
+            relief=tk.FLAT,
+            borderwidth=1,
+            highlightthickness=1,
+            highlightbackground=LIGHT_TXT,
+            highlightcolor=LIGHT_TXT,
         )
         self.alphabet_display.pack(anchor=tk.W, padx=(3, 0), pady=(0, 5))
 
@@ -265,6 +292,11 @@ class PlayfairCipherGUI:
             insertbackground=LIGHT_TXT,
             font=FONT,
             width=27,
+            relief=tk.FLAT,
+            borderwidth=1,
+            highlightthickness=1,
+            highlightbackground=LIGHT_TXT,
+            highlightcolor=LIGHT_TXT,
         )
         self.keyword_entry.pack(anchor=tk.W, padx=(3, 0), pady=(0, 15))
 
@@ -290,10 +322,9 @@ class PlayfairCipherGUI:
                     font=("Consolas", 14, "bold"),
                     width=3,
                     height=1,
-                    relief=tk.RIDGE,
-                    borderwidth=2,
+                    relief=tk.FLAT,
                 )
-                label.grid(row=i, column=j, padx=1, pady=2)
+                label.grid(row=i, column=j, padx=2, pady=2)
                 row.append(label)
             self.matrix_labels.append(row)
 
