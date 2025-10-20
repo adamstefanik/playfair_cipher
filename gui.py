@@ -45,7 +45,7 @@ class PlayfairCipherGUI:
         left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(10, 10))
 
         tk.Label(
-            left_frame, text="ENTER TEXT", bg=DARK_BG, fg=LIGHT_TXT, font=LABEL_FONT
+            left_frame, text="INPUT", bg=DARK_BG, fg=LIGHT_TXT, font=LABEL_FONT
         ).pack(anchor=tk.W, pady=(0, 5))
         self.input_text = tk.Text(
             left_frame,
@@ -103,7 +103,7 @@ class PlayfairCipherGUI:
 
         tk.Label(
             left_frame,
-            text="Encrypted / Decrypted Text",
+            text="OUTPUT",
             bg=DARK_BG,
             fg=LIGHT_TXT,
             font=LABEL_FONT,
