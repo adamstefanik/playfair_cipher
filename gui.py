@@ -35,7 +35,7 @@ BUTTON_BG = "#4a4a4a"
 HIGHLIGHT_BG = "#08AC2C"
 HIGHLIGHT_FG = "#2b2b2b"
 FONT = ("Consolas", 11)
-LABEL_FONT = ("Consolas", 14, "bold")
+LABEL_FONT = ("Consolas", 12, "bold")
 BUTTON_FONT = ("Consolas", 12, "bold")
 
 
