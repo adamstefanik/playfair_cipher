@@ -43,7 +43,7 @@ class PlayfairCipherGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Playfair Cipher")
-        self.root.geometry("625x575")
+        self.root.geometry("650x550")
         self.root.resizable(False, False)
         self.root.configure(bg=DARK_BG)
         self.current_alphabet = ALPHABET_CZECH
@@ -221,8 +221,8 @@ class PlayfairCipherGUI:
             right_frame,
             bg=DARK_ENTRY,
             fg=LIGHT_TXT,
-            font=("Consolas", 9, "bold"),
-            width=33,
+            font=FONT,
+            width=27,
             state="readonly",
             readonlybackground=DARK_ENTRY,
             relief=tk.FLAT,
@@ -284,7 +284,7 @@ class PlayfairCipherGUI:
     def setup_keyword_entry(self, parent):
         tk.Label(
             parent, text="Keyword", bg=DARK_BG, fg=LIGHT_TXT, font=LABEL_FONT
-        ).pack(anchor=tk.W, pady=(10, 5))
+        ).pack(anchor=tk.W, pady=(15, 5))
         self.keyword_entry = tk.Entry(
             parent,
             bg=DARK_ENTRY,
