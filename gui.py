@@ -1,11 +1,7 @@
-"""
-Playfair Cipher GUI using Tkinter
-"""
-
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-# Fix DPI scaling on Windows for crisp display
+# Oprava DPI scalingu na Windows pre ostrejsie zobrazenie
 try:
     from ctypes import windll
 
@@ -16,7 +12,7 @@ except:
 
         windll.user32.SetProcessDPIAware()  # Windows Vista+
     except:
-        pass  # Not on Windows or older version
+        pass
 
 from playfaircypher import (
     encrypt,
@@ -28,6 +24,7 @@ from playfaircypher import (
     ALPHABET_ENGLISH,
 )
 
+# Farby a fonty pre tmavu temu
 DARK_BG = "#222026"
 LIGHT_TXT = "#08AC2C"
 DARK_ENTRY = "#222026"
@@ -41,6 +38,7 @@ BUTTON_FONT = ("Consolas", 12, "bold")
 
 class PlayfairCipherGUI:
     def __init__(self, root):
+        # Inicializacia hlavneho okna a nastavenie temy
         self.root = root
         self.root.title("Playfair Cipher")
         self.root.geometry("650x550")
@@ -51,13 +49,14 @@ class PlayfairCipherGUI:
         self.setup_ui()
 
     def setup_ui(self):
+        # Vytvorenie hlavneho framu a rozdelenie na lavy a pravy panel
         main_frame = tk.Frame(self.root, bg=DARK_BG)
         main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-
         self.setup_left_panel(main_frame)
         self.setup_right_panel(main_frame)
 
     def setup_left_panel(self, parent):
+        # Lavy panel: vstup, vystup, buttony
         left_frame = tk.Frame(parent, bg=DARK_BG)
         left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(10, 10))
 
@@ -160,7 +159,7 @@ class PlayfairCipherGUI:
         self.setup_buttons(left_frame)
 
     def setup_buttons(self, parent):
-        # Configure custom button style for macOS compatibility
+        # Button styling
         style = ttk.Style()
         style.theme_use("default")
         style.configure(
@@ -185,6 +184,7 @@ class PlayfairCipherGUI:
         button_frame = tk.Frame(parent, bg=DARK_BG)
         button_frame.pack(fill=tk.X, pady=(10, 10))
 
+        # Tlacidlo na sifrovanie
         self.encrypt_btn = ttk.Button(
             button_frame,
             text="ENCRYPT",
@@ -194,6 +194,7 @@ class PlayfairCipherGUI:
         )
         self.encrypt_btn.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(5, 5))
 
+        # Tlacidlo na desifrovanie
         self.decrypt_btn = ttk.Button(
             button_frame,
             text="DECRYPT",
@@ -204,6 +205,7 @@ class PlayfairCipherGUI:
         self.decrypt_btn.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(5, 0))
 
     def setup_right_panel(self, parent):
+        # Pravy panel: vyber abecedy, zobrazenie abecedy, kluc, matica
         right_frame = tk.Frame(parent, bg=DARK_BG, width=400)
         right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, padx=(10, 10))
         right_frame.pack_propagate(False)
@@ -216,7 +218,7 @@ class PlayfairCipherGUI:
 
         self.setup_alphabet_selection(right_frame)
 
-        # Abeceda s menším fontom a väčším width
+        # Zobrazenie aktualnej abecedy
         self.alphabet_display = tk.Entry(
             right_frame,
             bg=DARK_ENTRY,
@@ -233,7 +235,7 @@ class PlayfairCipherGUI:
         )
         self.alphabet_display.pack(anchor=tk.W, padx=(3, 0), pady=(0, 5))
 
-        # Mapovanie
+        # Zobrazenie mapovania znakov
         self.mapping_display = tk.Label(
             right_frame,
             text="",
@@ -246,10 +248,10 @@ class PlayfairCipherGUI:
         self.setup_keyword_entry(right_frame)
         self.setup_matrix(right_frame)
 
-        # Inicializuj zobrazenie
         self.update_alphabet_info()
 
     def setup_alphabet_selection(self, parent):
+        # Vyber medzi ceskou a anglickou abecedou
         radio_frame = tk.Frame(parent, bg=DARK_BG)
         radio_frame.pack(anchor=tk.W, pady=(0, 5))
 
@@ -282,6 +284,7 @@ class PlayfairCipherGUI:
         ).pack(side=tk.LEFT, padx=(25, 0))
 
     def setup_keyword_entry(self, parent):
+        # Policko pre zadanie kluca
         tk.Label(
             parent, text="Keyword", bg=DARK_BG, fg=LIGHT_TXT, font=LABEL_FONT
         ).pack(anchor=tk.W, pady=(15, 5))
@@ -304,6 +307,7 @@ class PlayfairCipherGUI:
         self.keyword_entry.bind("<KeyRelease>", self.update_matrix_realtime)
 
     def setup_matrix(self, parent):
+        # Vytvorenie 5x5 matice
         tk.Label(parent, text="Matrix", bg=DARK_BG, fg=LIGHT_TXT, font=LABEL_FONT).pack(
             anchor=tk.W, pady=(0, 5)
         )
@@ -338,7 +342,7 @@ class PlayfairCipherGUI:
         self.update_alphabet_info()
 
     def update_alphabet_info(self):
-        """Update alphabet display and character mapping info"""
+
         choice = self.alphabet_var.get()
 
         if choice == "CZECH":
@@ -351,17 +355,17 @@ class PlayfairCipherGUI:
             alphabet_text = ""
             mapping_text = ""
 
-        # Update Entry widget
+        # Odomkne entry widget, vymaze stary text a vlozi novu abecedu
         self.alphabet_display.config(state="normal")
         self.alphabet_display.delete(0, tk.END)
         self.alphabet_display.insert(0, alphabet_text)
         self.alphabet_display.config(state="readonly")
 
-        # Update mapping Label
+        # Nastavi popis mapovania cz/en
         self.mapping_display.config(text=mapping_text)
 
     def update_matrix_realtime(self, event=None):
-        """Update matrix in real-time as user types keyword"""
+        # Aktualizuje maticu v realnom case pri pisani kluca
         try:
             key = self.keyword_entry.get().strip()
             if not key:
@@ -373,12 +377,12 @@ class PlayfairCipherGUI:
             pass
 
     def update_matrix(self, matrix, highlight_positions=None):
-        """Update matrix display with optional highlighting of used positions"""
+        # Aktualizuje zobrazenie matice a popripade zvyrazni pouzite pismena
         for i in range(5):
             for j in range(5):
                 char = matrix[i][j] if i < len(matrix) and j < len(matrix[i]) else "?"
 
-                # Check if this position should be highlighted
+                # Ak je pozicia v highlight_positions, zvyrazni ju
                 if highlight_positions and (i, j) in highlight_positions:
                     self.matrix_labels[i][j].config(
                         text=char, bg=HIGHLIGHT_BG, fg=HIGHLIGHT_FG
@@ -389,24 +393,26 @@ class PlayfairCipherGUI:
                     )
 
     def get_used_positions(self, bigrams, matrix):
-        """Get all matrix positions used in the bigrams"""
+        # Vrati vsetky pozicie v matici, ktore sa pouzili v bigramoch
         positions = set()
         for bigram in bigrams:
             if len(bigram) == 2:
                 for char in bigram:
-                    if char.isalpha():  # Skip digits
+                    if char.isalpha():  # Preskoc cislice
                         pos = find_position(matrix, char)
                         if pos:
                             positions.add(pos)
         return positions
 
     def set_text(self, widget, text):
+        # Bezpecne nastavi text do widgetu
         widget.config(state=tk.NORMAL)
         widget.delete(1.0, tk.END)
         widget.insert(1.0, text)
         widget.config(state=tk.DISABLED)
 
     def do_encrypt(self):
+        # Ziska vstup, kluc, zasifruje, zobrazi vysledky a zvyrazni pouzite pismena
         try:
             plaintext = self.input_text.get(1.0, tk.END).strip()
             key = self.keyword_entry.get().strip()
@@ -422,7 +428,7 @@ class PlayfairCipherGUI:
             self.set_text(self.filtered_encrypt_text, " ".join(bigrams))
             self.set_text(self.output_text, format_five(ciphertext))
 
-            # Get positions used in encryption and highlight them
+            # Zvyrazni pouzite pismena v matici
             used_positions = self.get_used_positions(bigrams, matrix)
             self.update_matrix(matrix, used_positions)
 
@@ -431,6 +437,7 @@ class PlayfairCipherGUI:
             messagebox.showerror("Encryption Error", str(e))
 
     def do_decrypt(self):
+        # Ziska vstup, kluc, desifruje, zobrazi vysledky a zvyrazni pouzite pismena
         try:
             ciphertext = self.input_text.get(1.0, tk.END).strip()
             key = self.keyword_entry.get().strip()
@@ -443,13 +450,11 @@ class PlayfairCipherGUI:
                 ciphertext, key, self.current_alphabet
             )
 
-            # Zobraz bigramy v Filtered Decryption Text
             self.set_text(self.filtered_decrypt_text, " ".join(decrypted_bigrams))
 
-            # Zobraz čistý text v output
             self.set_text(self.output_text, plaintext)
 
-            # Get positions used in decryption and highlight them
+            # Zvyrazni pouzite pismena v matici
             used_positions = self.get_used_positions(decrypted_bigrams, matrix)
             self.update_matrix(matrix, used_positions)
 
