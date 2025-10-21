@@ -41,6 +41,7 @@ playfair_cipher/
 
 - Python 3.8+
 - Tkinter
+- Ctypes
 
 
 ## License
