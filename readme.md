@@ -32,10 +32,12 @@ python main.py
 playfair_cipher/
 ├── pycache/
 ├── assets/
-│ └── ui_screenshot .png
-├── gui.py
+│ └── ui_screenshot.png
+├── .gitignore
 ├── LICENSE
+├── gui.py
 ├── main.py
+├── playfaircipher.py
 ├── README.md
 ```
 
