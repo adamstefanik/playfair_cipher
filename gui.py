@@ -14,7 +14,7 @@ except:
     except:
         pass
 
-from playfaircypher import (
+from playfaircipher import (
     encrypt,
     decrypt,
     format_five,
